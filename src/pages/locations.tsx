@@ -36,7 +36,7 @@ export default function Location() {
             <p>{data.result[0].overview}</p>
             <p>{data.result[0].history}</p>
             <h3>These are possible events that can happen in {data.result[0].name} in the next epoch:</h3>
-              <Scenarios />
+              <Scenarios epoch={currentEpoch} location={data.result[0].name} />
             <h3>The following characters can be found here:</h3>
             {data.result[0].npcs.map((item) => (
               <p>

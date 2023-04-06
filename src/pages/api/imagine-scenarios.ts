@@ -2,7 +2,8 @@ import { ChatOpenAI } from "langchain/chat_models";
 import { HumanChatMessage, SystemChatMessage } from "langchain/schema";
 import { connectToDatabase } from '../../../db';
 
-export default async function handler(req, res) {
+
+export default async function handler(req, res) {  
   const chat = new ChatOpenAI({
     modelName: "gpt-3.5-turbo",
     openAIApiKey: process.env.OPENAI_API_KEY,

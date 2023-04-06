@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const EpochManager = ({ setCurrentEpoch }) => {
-  const [currentEpoch, setCurrentEpochLocal] = useState(0);
+  const [currentEpoch, setCurrentEpochLocal] = useState(null);
 
   useEffect(() => {
     const fetchCurrentEpoch = async () => {
@@ -9,6 +9,7 @@ const EpochManager = ({ setCurrentEpoch }) => {
         const response = await fetch('/api/fetch_epoch');
         const data = await response.json();
         setCurrentEpoch(data.currentEpoch);
+        setCurrentEpochLocal(data.currentEpoch);
       } catch (error) {
         console.error(error);
       }
@@ -33,22 +34,18 @@ const EpochManager = ({ setCurrentEpoch }) => {
   };
 
   useEffect(() => {
-    const epochTimer = setInterval(() => {
-        setCurrentEpochLocal(epoch => {
-            const newEpoch = epoch + 1;
-            saveEpochToMongoDB(newEpoch);
-            return newEpoch;
-        });
-    }, 100000);
+    if (currentEpoch !== null) {
+      const epochTimer = setInterval(() => {
+          setCurrentEpochLocal(epoch => {
+              const newEpoch = epoch + 1;
+              saveEpochToMongoDB(newEpoch);
+              return newEpoch;
+          });
+      }, 100000);
 
-    return () => clearInterval(epochTimer);
-  }, []);
-
-  return (
-    <div>
-      <p>Current Epoch: {currentEpoch}</p>
-    </div>
-  );
+      return () => clearInterval(epochTimer);
+    }
+  }, [currentEpoch]);
 };
 
 export default EpochManager;
