@@ -6,20 +6,23 @@ import snapshot from '@snapshot-labs/snapshot.js';
 import { getAccount } from '@wagmi/core'
 import { Web3Provider } from '@ethersproject/providers';
 
-const GetScenarios = (props) => {  
+const GetScenarios = () => {  
   const [data, setData] = useState([]);
+  const [endDate, setEndDate] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const currentUnixTime = Math.floor(Date.now() / 1000); // convert current time to Unix timestamp
 
   const handleButtonClick = async () => {
     setIsLoading(true);
     const response = await axios.get("/api/fetch_scenarios");
-    const data = response.data[0].voteCountsByChoice
-    console.log(data)
+    const data = response.data[8].voteCountsByChoice
+    const endDate = response.data[8].end
     setData(data);
+    setEndDate(endDate);
     setIsLoading(false);
   };
 
-  const castVote = async (proposalId, choiceNum) => {
+  const castVote = async (proposalId, choiceIndex) => {
     const hub = 'https://hub.snapshot.org'; // or https://testnet.snapshot.org for testnet
     const client = new snapshot.Client712(hub);
     const web3 = new Web3Provider(window.ethereum);
@@ -29,7 +32,7 @@ const GetScenarios = (props) => {
         space: 'stepa.eth',
         proposal: proposalId,
         type: 'single-choice',
-        choice: choiceNum,
+        choice: choiceIndex,
         reason: '',
         app: 'synthesia'
       });
@@ -55,6 +58,7 @@ const GetScenarios = (props) => {
           ))}
         </ul>
       )}
+      <p>{currentUnixTime > endDate ? "Vote finished" : "Vote in progress"}</p>
     </>
   );
 };
