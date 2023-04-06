@@ -25,8 +25,12 @@ export default async function handler(req, res) {
 
 
 // new SystemChatMessage(
-//   'You are a virtual game master. Your goal is to offer three potential events that might happen in the provided location. List three scenarios. Split the scenarios with new line.'
+//   'You are a virtual game master. Your goal is to offer three potential events that might
+//  happen in the provided location. List three scenarios. Split the scenarios with new line.'
 // ),
 // new HumanChatMessage(
-//   'Location is "The Crypt", a hidden underground network of tunnels and chambers that serves as a hub for the cypherpunk community in the world of web3. The Crypt is a place of secrecy and intrigue, where hackers, activists, and freedom fighters come together to exchange ideas and plan their next moves.'
+//   'Location is "The Crypt", a hidden underground network of tunnels and chambers that serves
+//  as a hub for the cypherpunk community in the world of web3. The Crypt is a place of secrecy
+//  and intrigue, where hackers, activists, and freedom fighters come together to exchange ideas
+//  and plan their next moves.'
 // ),
