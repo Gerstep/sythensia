@@ -5,6 +5,7 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { useEffect, useState } from "react";
+import { Web3Button, Web3NetworkSwitch } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
   arbitrum,
@@ -56,6 +57,9 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
+    <Web3Button icon="show" label="Connect Wallet" balance="show" />
+    <br />
+    
       {ready ? (
         <WagmiConfig client={wagmiClient}>
           <Component {...pageProps} />
