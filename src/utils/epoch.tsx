@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-const EpochManager = () => {
-  const [currentEpoch, setCurrentEpoch] = useState(0);
+const EpochManager = ({ setCurrentEpoch }) => {
+  const [currentEpoch, setCurrentEpochLocal] = useState(0);
 
   useEffect(() => {
     const fetchCurrentEpoch = async () => {
@@ -14,7 +14,7 @@ const EpochManager = () => {
       }
     };
     fetchCurrentEpoch();
-  }, []);
+  }, [setCurrentEpoch]);
 
   const saveEpochToMongoDB = async (epoch) => {
     try {
@@ -25,6 +25,8 @@ const EpochManager = () => {
       });
       const data = await response.json();
       console.log(data);
+      setCurrentEpoch(epoch); // call the setter function to update state in the ancestor component
+      setCurrentEpochLocal(epoch); // update local state
     } catch (error) {
       console.error(error);
     }
@@ -32,11 +34,11 @@ const EpochManager = () => {
 
   useEffect(() => {
     const epochTimer = setInterval(() => {
-      setCurrentEpoch(epoch => {
-        const newEpoch = epoch + 1;
-        saveEpochToMongoDB(newEpoch);
-        return newEpoch;
-      });
+        setCurrentEpochLocal(epoch => {
+            const newEpoch = epoch + 1;
+            saveEpochToMongoDB(newEpoch);
+            return newEpoch;
+        });
     }, 100000);
 
     return () => clearInterval(epochTimer);

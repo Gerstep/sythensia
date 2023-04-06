@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import useSWR from 'swr';
 import EpochManager from '../utils/epoch';
+import Scenarios from "@/utils/scenarios";
 
 async function fetcher(url) {
   const response = await fetch(url);
@@ -10,6 +11,7 @@ async function fetcher(url) {
 }
 
 export default function Location() {
+  const [currentEpoch, setCurrentEpoch] = useState(0);
   const { data, error } = useSWR("/api/data", fetcher, { refreshInterval: 30000 });
   const [showOverview, setShowOverview] = useState(false);
   const [numClicks, setNumClicks] = useState(0);
@@ -34,9 +36,7 @@ export default function Location() {
             <p>{data.result[0].overview}</p>
             <p>{data.result[0].history}</p>
             <h3>These are possible events that can happen in {data.result[0].name} in the next epoch:</h3>
-            <ul>
-              <li>One</li>
-            </ul>
+              <Scenarios />
             <h3>The following characters can be found here:</h3>
             {data.result[0].npcs.map((item) => (
               <p>
@@ -46,8 +46,8 @@ export default function Location() {
               </p>
             ))}
 
-            <EpochManager />
-            
+            <EpochManager setCurrentEpoch={setCurrentEpoch} />
+            <p>Current Epoch (in ancestor component): {currentEpoch}</p>
           </>
         )}
       </div>
