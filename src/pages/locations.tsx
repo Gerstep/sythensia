@@ -11,13 +11,15 @@ async function fetcher(url) {
 export default function Location() {
   const { data, error } = useSWR("/api/data", fetcher, { refreshInterval: 30000 });
   const [showOverview, setShowOverview] = useState(false);
+  const [numClicks, setNumClicks] = useState(0);
 
   if (error) return <div>Failed to load data</div>;
   if (!data) return <div>Loading...</div>;
 
   const showLocation = () => {
-    setShowOverview(true);
-  }
+    setNumClicks(numClicks + 1);
+    setShowOverview(numClicks % 2 === 0);
+  };
 
   return (
     <>
@@ -25,11 +27,17 @@ export default function Location() {
 
       <div>
         <h1>Available locations</h1>
-        {data.result.map((item) => (
-          <button onClick={showLocation}>{item.name}</button>
-        ))}
+        <button onClick={showLocation}>{data.result[0].name}</button>
         {showOverview && <p>{data.result[0].overview}</p>}
         {showOverview && <p>{data.result[0].history}</p>}
+        {showOverview && <h3>The following characters can be found here:</h3>}
+        {showOverview && data.result[0].npcs.map((item) => (
+          <p>
+            <b>{item.name}</b>
+            <br />
+            {item.description}
+          </p>
+        ))}
       </div>
     </>
   );
