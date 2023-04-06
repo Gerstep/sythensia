@@ -2,10 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { connectToDatabase } from '../../../db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const db = await connectToDatabase();
-  const collection = db.collection('location');
-
   try {
+    const db = await connectToDatabase();
+    const collection = db.collection('location');
     const result = await collection.find().toArray();
     res.status(200).json({ message: 'Data queried successfully', result });
   } catch (error) {

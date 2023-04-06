@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import useSWR from 'swr';
+import EpochManager from '../utils/epoch';
 
 async function fetcher(url) {
   const response = await fetch(url);
@@ -28,16 +29,27 @@ export default function Location() {
       <div>
         <h1>Available locations</h1>
         <button onClick={showLocation}>{data.result[0].name}</button>
-        {showOverview && <p>{data.result[0].overview}</p>}
-        {showOverview && <p>{data.result[0].history}</p>}
-        {showOverview && <h3>The following characters can be found here:</h3>}
-        {showOverview && data.result[0].npcs.map((item) => (
-          <p>
-            <b>{item.name}</b>
-            <br />
-            {item.description}
-          </p>
-        ))}
+        {showOverview && (
+          <>
+            <p>{data.result[0].overview}</p>
+            <p>{data.result[0].history}</p>
+            <h3>These are possible events that can happen in {data.result[0].name} in the next epoch:</h3>
+            <ul>
+              <li>One</li>
+            </ul>
+            <h3>The following characters can be found here:</h3>
+            {data.result[0].npcs.map((item) => (
+              <p>
+                <b>{item.name}</b>
+                <br />
+                {item.description}
+              </p>
+            ))}
+
+            <EpochManager />
+            
+          </>
+        )}
       </div>
     </>
   );
