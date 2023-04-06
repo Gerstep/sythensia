@@ -8,8 +8,7 @@ export default async function handler(req, res) {
       first: 10,
       skip: 0,
       where: {
-        space_in: ["stepa.eth"],
-        state: "open"
+        space_in: ["stepa.eth"]
       },
       orderBy: "created",
       orderDirection: desc
@@ -60,15 +59,16 @@ export default async function handler(req, res) {
     const voteCountsByChoice = {};
 
     // Initialize the vote counts for each choice to 0
-    choices.forEach((choice) => {
-      voteCountsByChoice[choice] = 0;
+    choices.forEach((choice, i) => {
+      voteCountsByChoice[choice] = { count: 0, index: i+1 };
+      // console.log('saved choice: ' + choice + ' with index ' + voteCountsByChoice[choice].index)
     });
 
     // Calculate the vote count for each choice
     votes.forEach((vote) => {
       Object.keys(voteCountsByChoice).forEach((choice) => {
-        if (vote.choice === choice) {
-          voteCountsByChoice[choice]++;
+        if (vote.choice === voteCountsByChoice[choice].index) {
+          voteCountsByChoice[choice].count++;
         }
       });
     });

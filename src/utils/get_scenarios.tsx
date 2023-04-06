@@ -13,7 +13,7 @@ const GetScenarios = (props) => {
   const handleButtonClick = async () => {
     setIsLoading(true);
     const response = await axios.get("/api/fetch_scenarios");
-    const data = response.data[8].voteCountsByChoice
+    const data = response.data[0].voteCountsByChoice
     console.log(data)
     setData(data);
     setIsLoading(false);
@@ -42,12 +42,12 @@ const GetScenarios = (props) => {
       </button>
       {data.length > 0 && (
         <ul>
-          {data.map((item, index) => (
+          {data.map((item) => (
             <li key={item.choice}>
                 {item.choice}
                 <br />
-                Current votes: {item.count}<br />
-                <button onClick={() => castVote(item.proposalId, index+1)}>
+                Current votes: {item.count.count}<br />
+                <button onClick={() => castVote(item.proposalId, item.count.index)}>
                     Vote
                 </button>
                 <p></p>
