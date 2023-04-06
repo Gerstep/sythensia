@@ -1,3 +1,5 @@
+// the code to create scenarios
+
 import { useState } from "react";
 import axios from "axios";
 import snapshot from '@snapshot-labs/snapshot.js';
@@ -14,6 +16,9 @@ const Scenarios = (props) => {
     const data = response.data.data.split("\n")
     setData(data);
     setIsLoading(false);
+
+    // TODO: Add saving to the database (code is already in api/imagine-scenarios.ts)
+
     const proposalStart = Math.floor(Date.now() / 1000);
     const proposalEnd = Math.floor(Date.now() / 1000 + 10000);
 

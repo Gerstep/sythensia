@@ -2,37 +2,44 @@ import { ChatOpenAI } from "langchain/chat_models";
 import { HumanChatMessage, SystemChatMessage } from "langchain/schema";
 import { connectToDatabase } from '../../../db';
 
-
 export default async function handler(req, res) {  
-  const chat = new ChatOpenAI({
-    modelName: "gpt-3.5-turbo",
-    openAIApiKey: process.env.OPENAI_API_KEY,
-  });
-  
-  const message = await chat.generate([
-    [
-      new SystemChatMessage(
-        'write three new words. each word on a new line'
-      ),
-      new HumanChatMessage(
-        'start'
-      ),
-    ]
-  ]);
-
-  const response = message.generations[0][0].text
-  console.log(response)
-
   try {
-    const db = await connectToDatabase();
-    const collection = db.collection('scenarios');
-    const result = await collection.insertOne({ scenario: response });
-    res.status(201).json({ message: "Scenario saved successfully", data: response });
+    const chat = new ChatOpenAI({
+      modelName: "gpt-3.5-turbo",
+      openAIApiKey: process.env.OPENAI_API_KEY,
+    });
+
+    const message = await chat.generate([
+      [
+        new SystemChatMessage(
+          'write three new words. each word on a new line'
+        ),
+        new HumanChatMessage(
+          'start'
+        ),
+      ]
+    ]);
+
+    const response = message.generations[0][0].text;
+    console.log(response);
+
+    res.status(200).json({ message: "Scenario generated successfully", data: response });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong with AI generation" });
   }
-}
+};
+
+  // try {
+  //   const db = await connectToDatabase();
+  //   const collection = db.collection('scenarios');
+  //   const result = await collection.insertOne({ scenario: response });
+  //   res.status(201).json({ message: "Scenario saved successfully", data: response });
+  // } catch (error) {
+  //   console.error(error);
+  //   res.status(500).json({ message: "Something went wrong" });
+  // }
+
 
 
 // [

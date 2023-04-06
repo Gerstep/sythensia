@@ -41,7 +41,7 @@ const EpochManager = ({ setCurrentEpoch }) => {
               saveEpochToMongoDB(newEpoch);
               return newEpoch;
           });
-      }, 100000);
+      }, 10000000);
 
       return () => clearInterval(epochTimer);
     }
