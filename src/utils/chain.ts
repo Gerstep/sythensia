@@ -10,7 +10,7 @@ const model = new OpenAI({
 
 const startGoalPrompt = new PromptTemplate({
   template:
-    "You are a game master of Synthasia. You need to come up with a potential scenarios for a game location `{goal}`. Create a list of zero to three possible game scenarios. Return the response as an array of strings that can be used in JSON.parse()",
+    "You are a game master. You need to come up with potential scenarios for a game location `{goal}`. Create a list of zero to three possible game scenarios. Return the response as an array of strings that can be used in JSON.parse()",
   inputVariables: ["goal"],
 });
 export const startGoalAgent = async (goal: string) => {

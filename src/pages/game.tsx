@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import GameWindow from "@/components/GameWindow";
 import type { Message } from "@/components/GameWindow";
 import Expand from "@/components/expand";
-import { VscLoading } from "react-icons/vsc";
 import Button from "@/components/Button";
 import AutonomousAgent from "@/components/AutonomousAgent";
 
@@ -12,8 +10,21 @@ export default function Game() {
   const [name, setName] = React.useState<string>("");
   const [goalInput, setGoalInput] = React.useState<string>("");
   const [agent, setAgent] = React.useState<AutonomousAgent | null>(null);
+  const [newTaskAdded, setNewTaskAdded] = useState(false);
 
   const [messages, setMessages] = React.useState<Message[]>([]);
+
+  useEffect(() => {
+    setName("The Crypt")
+    setGoalInput('Location is "The Crypt", a hidden underground network of tunnels and chambers that serves as a hub for the cypherpunk community in the world of web3. The Crypt is a place of secrecy and intrigue, where hackers, activists, and freedom fighters come together to exchange ideas and plan their next moves')
+  }, []);
+
+  useEffect(() => {
+    const hasNewTask = messages.some(message => message.type === 'task');
+    if (hasNewTask) {
+      setNewTaskAdded(true);
+    }
+  }, [messages]);
 
   const handleTask = () => {
     const addMessage = (message: Message) =>
@@ -48,24 +59,20 @@ export default function Game() {
               </div>
             </div>
 
-        <Expand className="w-full h-screen">
+        <Expand className="w-full h-3/4">
           <GameWindow messages={messages} />
         </Expand>
 
-      <Button 
-        className="mx-10"
-        onClick={handleTask}
-      >
-        Explore
-      </Button>
-
+      {newTaskAdded ? (
+        <div className="flex space-x-4">
+          <Button>Select Option 1</Button>
+          <Button>Select Option 2</Button>
+          <Button>Select Option 3</Button>
+        </div>
+      ) : (
+        <Button className="mx-10" onClick={handleTask}>Explore {name}</Button>
+      )}
       </div></div></main>
-      {/* <Button 
-        className="mx-10"
-        onClick={handleStopAgent}
-      >
-        Talk to NPC
-      </Button> */}
     </>
   );
 }

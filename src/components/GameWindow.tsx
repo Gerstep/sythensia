@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { FaBrain, FaListAlt, FaPlayCircle, FaStar } from "react-icons/fa";
+import { FaBrain, FaBolt, FaPlayCircle, FaStar } from "react-icons/fa";
 import Expand from "./expand";
 
 interface ChatWindowProps {
@@ -12,8 +12,8 @@ const GameWindow = ( {messages} ) => {
     console.log(messages)
 
     return (
-        <div className="h-full border-translucent flex w-full flex-col rounded-3xl border-2 border-white/20 bg-zinc-900 text-white shadow-2xl drop-shadow-lg ">
-        <div className="mb-2 mr-2 h-[11em] overflow-y-auto overflow-x-hidden sm-h:h-[16em] md-h:h-[21em] lg-h:h-[30em] ">
+        <div className="border-translucent h-full flex w-full flex-col rounded-3xl border-2 border-white/20 bg-zinc-900 text-white shadow-2xl drop-shadow-lg ">
+        <div className="mb-2 mr-2 overflow-y-auto overflow-x-hidden sm-h:h-[16em] md-h:h-[21em] lg-h:h-[30em] ">
           {messages.map((message, index) => (
             <Message key={`${index}-${message.type}`} message={message} />
           ))}
@@ -42,7 +42,7 @@ const getMessageIcon = (message: Message) => {
       case "goal":
         return <FaStar className="text-yellow-400" />;
       case "task":
-        return <FaListAlt className="text-gray-300" />;
+        return <FaBolt className="text-blue-300" />;
       case "thinking":
         return <FaBrain className="mt-[0.1em] text-pink-400" />;
       case "action":
@@ -53,9 +53,9 @@ const getMessageIcon = (message: Message) => {
   const getMessagePrefix = (message: Message) => {
     switch (message.type) {
       case "goal":
-        return "Embarking on a new goal:";
+        return "Starting a new journey:";
       case "task":
-        return "Added task:";
+        return "Option availabe:";
       case "thinking":
         return "Thinking...";
       case "action":
