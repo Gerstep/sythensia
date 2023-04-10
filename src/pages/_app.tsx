@@ -17,7 +17,7 @@ import {
   optimism,
   polygon,
 } from "wagmi/chains";
-import "../styles/Home.module.css";
+import "public/globals.css";
 
 // 1. Get projectID at https://cloud.walletconnect.com
 if (!process.env.NEXT_PUBLIC_PROJECT_ID) {
@@ -59,13 +59,14 @@ export default function App({ Component, pageProps }) {
     <>
     <Web3Button icon="show" label="Connect Wallet" balance="show" />
     <br />
-    
-      {ready ? (
-        <WagmiConfig client={wagmiClient}>
-          <Component {...pageProps} />
-        </WagmiConfig>
-      ) : null}
 
+      <div className="bg-gray-100 p-4">
+        {ready ? (
+          <WagmiConfig client={wagmiClient}>
+            <Component {...pageProps} className="antialiased" />
+          </WagmiConfig>
+        ) : null}
+      </div>
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </>
   );
