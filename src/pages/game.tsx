@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import GameWindow from "@/components/GameWindow";
 import type { Message } from "@/components/GameWindow";
 import Expand from "@/components/expand";
 import { VscLoading } from "react-icons/vsc";
 import Button from "@/components/Button";
+import AutonomousAgent from "@/components/AutonomousAgent";
 
 
 export default function Game() {
+  const [name, setName] = React.useState<string>("");
+  const [goalInput, setGoalInput] = React.useState<string>("");
+  const [agent, setAgent] = React.useState<AutonomousAgent | null>(null);
 
-  // const [messages] = React.useState<Message[]>([]);
+  const [messages, setMessages] = React.useState<Message[]>([]);
+
+  const handleTask = () => {
+    const addMessage = (message: Message) =>
+      setMessages((prev) => [...prev, message]);
+    const agent = new AutonomousAgent(name, goalInput, addMessage, () =>
+      setAgent(null)
+    );
+    setAgent(agent);
+    agent.run().then(console.log).catch(console.error);
+  };
 
   return (
     <>
@@ -19,30 +33,21 @@ export default function Game() {
 
       <div className="m-2">
         <Expand className="w-full">
-          <GameWindow />
+          <GameWindow messages={messages} />
         </Expand>
       </div>
 
-      <Button className="mx-10">
+      <Button 
+        className="mx-10"
+        onClick={handleTask}
+      >
         Explore
       </Button>
-      <Button className="mx-10">
-        Talk to NPC
-      </Button>
-
-      {/* <Button
-        disabled={agent != null || name === "" || goalInput === ""}
-        onClick={handleNewGoal}
-        className="mt-10"
+      {/* <Button 
+        className="mx-10"
+        onClick={handleStopAgent}
       >
-        {agent == null ? (
-          "Deploy Agent"
-        ) : (
-          <>
-            <VscLoading className="animate-spin" size={20} />
-            <span className="ml-2">Agent running</span>
-          </>
-        )}
+        Talk to NPC
       </Button> */}
     </>
   );

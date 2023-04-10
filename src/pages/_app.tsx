@@ -59,14 +59,11 @@ export default function App({ Component, pageProps }) {
     <>
     <Web3Button icon="show" label="Connect Wallet" balance="show" />
     <br />
-
-      <div className="bg-gray-100 p-4">
         {ready ? (
           <WagmiConfig client={wagmiClient}>
             <Component {...pageProps} className="antialiased" />
           </WagmiConfig>
         ) : null}
-      </div>
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </>
   );

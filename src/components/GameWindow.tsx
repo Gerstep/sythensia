@@ -7,9 +7,7 @@ interface ChatWindowProps {
     messages: Message[];
   }
 
-const GameWindow = () => {
-
-    const messages = []
+const GameWindow = ( {messages} ) => {
 
     console.log(messages)
 
