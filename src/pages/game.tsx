@@ -3,6 +3,8 @@ import Link from "next/link";
 import GameWindow from "@/components/GameWindow";
 import type { Message } from "@/components/GameWindow";
 import Expand from "@/components/expand";
+import { VscLoading } from "react-icons/vsc";
+import Button from "@/components/Button";
 
 
 export default function Game() {
@@ -20,6 +22,28 @@ export default function Game() {
           <GameWindow />
         </Expand>
       </div>
+
+      <Button className="mx-10">
+        Explore
+      </Button>
+      <Button className="mx-10">
+        Talk to NPC
+      </Button>
+
+      {/* <Button
+        disabled={agent != null || name === "" || goalInput === ""}
+        onClick={handleNewGoal}
+        className="mt-10"
+      >
+        {agent == null ? (
+          "Deploy Agent"
+        ) : (
+          <>
+            <VscLoading className="animate-spin" size={20} />
+            <span className="ml-2">Agent running</span>
+          </>
+        )}
+      </Button> */}
     </>
   );
 }
