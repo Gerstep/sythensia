@@ -27,15 +27,30 @@ export default function Game() {
 
   return (
     <>
-      <Link href="/">
-        <button className="rounded-lg px-4 py-2 border-2 border-blue-500 text-blue-500 hover:bg-blue-600 hover:text-blue-100 duration-300">Home</button>
-      </Link>
+      <main className="flex h-screen w-screen flex-row">
+      
+      <div
+          id="content"
+          className="z-10 flex h-screen w-full items-center justify-center p-2 px-2 sm:px-4 md:px-10"
+        >
+          <div
+            id="layout"
+            className="flex h-full w-full max-w-screen-lg flex-col items-center justify-between gap-3 py-5 md:justify-center"
+          >
+            <div
+              id="title"
+              className="relative flex flex-col items-center font-mono"
+            >
+              <div className="flex flex-row items-start">
+                <span className="text-4xl font-bold xs:text-5xl sm:text-6xl">
+                  Synthasia
+                </span>
+              </div>
+            </div>
 
-      <div className="m-2">
-        <Expand className="w-full">
+        <Expand className="w-full h-screen">
           <GameWindow messages={messages} />
         </Expand>
-      </div>
 
       <Button 
         className="mx-10"
@@ -43,6 +58,8 @@ export default function Game() {
       >
         Explore
       </Button>
+
+      </div></div></main>
       {/* <Button 
         className="mx-10"
         onClick={handleStopAgent}

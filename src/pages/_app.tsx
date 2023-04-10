@@ -7,6 +7,7 @@ import { Web3Modal } from "@web3modal/react";
 import { useEffect, useState } from "react";
 import { Web3Button, Web3NetworkSwitch } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
+import Link from "next/link";
 import {
   arbitrum,
   avalanche,
@@ -58,6 +59,9 @@ export default function App({ Component, pageProps }) {
   return (
     <>
     <Web3Button icon="show" label="Connect Wallet" balance="show" />
+    <Link href="/">
+        <button className="rounded-lg px-4 py-2 border-2 border-blue-500 text-blue-500 hover:bg-blue-600 hover:text-blue-100 duration-300">Home</button>
+      </Link>
     <br />
         {ready ? (
           <WagmiConfig client={wagmiClient}>

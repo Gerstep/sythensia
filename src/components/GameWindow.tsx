@@ -12,7 +12,7 @@ const GameWindow = ( {messages} ) => {
     console.log(messages)
 
     return (
-        <div className="border-translucent flex w-full flex-col rounded-3xl border-2 border-white/20 bg-zinc-900 text-white shadow-2xl drop-shadow-lg ">
+        <div className="h-full border-translucent flex w-full flex-col rounded-3xl border-2 border-white/20 bg-zinc-900 text-white shadow-2xl drop-shadow-lg ">
         <div className="mb-2 mr-2 h-[11em] overflow-y-auto overflow-x-hidden sm-h:h-[16em] md-h:h-[21em] lg-h:h-[30em] ">
           {messages.map((message, index) => (
             <Message key={`${index}-${message.type}`} message={message} />
