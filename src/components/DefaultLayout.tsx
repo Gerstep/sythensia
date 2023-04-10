@@ -9,7 +9,7 @@ const DefaultLayout = (props: LayoutProps) => {
   const description =
     "A collective intelligence game";
   return (
-    <div className="flex min-h-screen min-h-screen flex-col bg-gradient-to-b from-[#2B2B2B] to-[#1F1F1F]">
+    <div className="flex flex-col bg-gradient-to-b from-[#2B2B2B] to-[#1F1F1F]">
       <Head>
         <title>Synthasia</title>
         <meta name="description" content={description} />

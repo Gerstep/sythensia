@@ -6,6 +6,7 @@ const model = new OpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 0.9,
   modelName: "gpt-3.5-turbo",
+  maxTokens: 500,
 });
 
 const startGoalPrompt = new PromptTemplate({
@@ -18,6 +19,18 @@ export const startGoalAgent = async (goal: string) => {
     goal,
   });
 };
+
+const advancePrompt = new PromptTemplate({
+    template:
+      "You are a game master. Game location is `{goal}`. The player chose scenario `{options}`. Write a short story based on this scenario. Return the response as a string.",
+    inputVariables: ["goal", "options"],
+  });
+  export const advanceAgent = async (goal: string, options: string) => {
+    return await new LLMChain({ llm: model, prompt: advancePrompt }).call({
+      goal,
+      options
+    });
+  };
 
 const executeTaskPrompt = new PromptTemplate({
   template:

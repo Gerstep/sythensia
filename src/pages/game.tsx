@@ -12,21 +12,24 @@ export default function Game() {
   const [goalInput, setGoalInput] = React.useState<string>("");
   const [agent, setAgent] = React.useState<AutonomousAgent | null>(null);
   const [newTaskAdded, setNewTaskAdded] = useState(false);
+  const [taskMessages, setTaskMessages] = useState<string[]>([]);
 
   const [messages, setMessages] = React.useState<Message[]>([]);
 
   useEffect(() => {
     setName("The Crypt")
-    setGoalInput('Location is "The Crypt", a hidden underground network of tunnels and chambers that serves as a hub for the cypherpunk community in the world of web3. The Crypt is a place of secrecy and intrigue, where hackers, activists, and freedom fighters come together to exchange ideas and plan their next moves')
+    setGoalInput('Location is "The Crypt", a hidden underground network of tunnels and chambers that serves as a hub for the cypherpunk community in the world of web3. The Crypt is a place of secrecy and intrigue, where hackers, activists, and freedom fighters come together to exchange ideas and plan their next moves.')
   }, []);
 
   useEffect(() => {
-    const hasNewTask = messages.some(message => message.type === 'task');
-    if (hasNewTask) {
+    const filteredMessages = messages.filter(message => message.type === 'task').map(message => message.value);
+    if (filteredMessages.length > 0) {
       setNewTaskAdded(true);
+      setTaskMessages(filteredMessages.map(message => message));
     }
   }, [messages]);
 
+  // generate options
   const handleTask = () => {
     const addMessage = (message: Message) =>
       setMessages((prev) => [...prev, message]);
@@ -37,9 +40,19 @@ export default function Game() {
     agent.run().then(console.log).catch(console.error);
   };
 
+  const advance = (options) => {
+    const addMessage = (message: Message) =>
+      setMessages((prev) => [...prev, message]);
+    const agent = new AutonomousAgent(name, goalInput, addMessage, () =>
+      setAgent(null)
+    );
+    setAgent(agent);
+    agent.advance(options).then(console.log).catch(console.error);
+  };
+
   return (
     <DefaultLayout>
-      <main className="flex h-screen w-screen flex-row">
+      <main className="flex h-full w-screen flex-row">
       
       <div
           id="content"
@@ -47,7 +60,7 @@ export default function Game() {
         >
           <div
             id="layout"
-            className="flex h-full w-full max-w-screen-lg flex-col items-center justify-between gap-3 py-5 md:justify-center"
+            className="flex h-full w-full max-w-screen-lg flex-col items-center justify-between gap-3 md:justify-center"
           >
             <div
               id="title"
@@ -64,16 +77,20 @@ export default function Game() {
           <GameWindow messages={messages} name={name} />
         </Expand>
 
-      {newTaskAdded ? (
-        <div className="flex space-x-4">
-          <span className="mr-2 font-bold mx-2 my-1 rounded-lg border-[2px] border-white/10 bg-gray-50 p-2 font-mono text-base">Select you next move</span>
-          <Button>Option 1</Button>
-          <Button>Option 2</Button>
-          <Button>Option 3</Button>
-        </div>
-      ) : (
-        <Button className="mx-10" onClick={handleTask}>Explore {name}</Button>
-      )}
+      <div className="mx-2 my-1 rounded-lg border-[2px] border-white/10 font-mono text-base w-full p-2 text-white">
+        {newTaskAdded ? (
+          <div className="flex space-x-4">
+            <span className="mr-2 font-bold p-2 my-2">Make a choice</span>
+            {taskMessages.map(task => ( 
+              <Button key={task} onClick={() => advance(task)}>
+                {task.split(' ').slice(0, 2).join(' ')}
+              </Button>
+            ))}
+          </div>
+        ) : (
+          <Button className="" onClick={handleTask}>Explore {name}</Button>
+        )}
+      </div>
       </div></div></main>
     </DefaultLayout>
   );

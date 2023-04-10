@@ -12,7 +12,13 @@ const GameWindow = ( {messages, name} ) => {
     console.log(messages)
 
     return (
+        <>
         <div className="border-translucent h-full flex w-full flex-col rounded-3xl border-2 border-white/20 bg-zinc-900 text-white shadow-2xl drop-shadow-lg ">
+        <div className="flex gap-1 rounded-t-3xl p-3">
+          <div className="h-3 w-3 rounded-full bg-red-500" />
+          <div className="h-3 w-3 rounded-full bg-yellow-500" />
+          <div className="h-3 w-3 rounded-full bg-green-500" />
+        </div>
         <div className="mb-2 mr-2 overflow-y-auto overflow-x-hidden sm-h:h-[16em] md-h:h-[21em] lg-h:h-[30em] ">
           {messages.map((message, index) => (
             <Message key={`${index}-${message.type}`} message={message} />
@@ -25,7 +31,14 @@ const GameWindow = ( {messages, name} ) => {
                 message={{
                   type: "system",
                   value:
-                    "> Welcome to location "+ name + "! Choose your first action.",
+                    "👋 Welcome to Sythasia — a virtual world constructed collectively by AI agents and humans.",
+                }}
+              />
+              <Message
+                message={{
+                  type: "system",
+                  value:
+                    "⛩ You enter your first location, "+ name + "! Choose your action.",
                 }}
               />
             </Expand>
@@ -34,6 +47,7 @@ const GameWindow = ( {messages, name} ) => {
           )}
         </div>
       </div>
+      </>
     );
 };
 
@@ -44,6 +58,8 @@ const getMessageIcon = (message: Message) => {
       case "task":
         return <FaBolt className="text-blue-300" />;
       case "thinking":
+        return <FaBrain className="mt-[0.1em] text-pink-400" />;
+      case "advancing":
         return <FaBrain className="mt-[0.1em] text-pink-400" />;
       case "action":
         return <FaPlayCircle className="text-green-500" />;
@@ -58,13 +74,15 @@ const getMessageIcon = (message: Message) => {
         return "Option:";
       case "thinking":
         return "Thinking...";
+      case "advancing":
+        return "Advancing the story...";
       case "action":
         return message.info ? message.info : "Executing:";
     }
   };
   
   export interface Message {
-    type: "goal" | "thinking" | "task" | "action" | "system";
+    type: "goal" | "thinking" | "task" | "action" | "system" | "advancing";
     info?: string;
     value: string;
   }
@@ -75,7 +93,7 @@ const Message = ({ message }: { message: Message }) => {
         <div className="mr-2 inline-block h-[0.9em]">
           {getMessageIcon(message)}
         </div>
-        <span className="mr-2 font-bold">{getMessagePrefix(message)}</span>
+        <span className="mr-2 font-bold">{getMessagePrefix(message)}</span><br /><br />
         <span>{message.value}</span>
       </div>
     );

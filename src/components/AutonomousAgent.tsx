@@ -26,6 +26,9 @@ class AutonomousAgent {
     this.sendGoalMessage();
     this.sendThinkingMessage();
 
+    console.log(`Loop ${this.numLoops}`);
+    console.log(this.tasks);
+
     // Initialize by getting tasks
     try {
       this.tasks = await this.getInitialTasks();
@@ -36,13 +39,35 @@ class AutonomousAgent {
     } catch (e) {
       console.log(e);
       this.sendErrorMessage(
-        `ERROR retrieving initial tasks array. Please make your goal more clear or revise it such that it is within our model's policies to run. Shutting Down.`
+        `ERROR retrieving initial tasks array. Shutting Down.`
       );
       this.shutdown();
       return;
     }
 
-    await this.loop();
+    // don't loop yet
+    // await this.loop();
+  }
+
+  async advance(options) {
+    this.sendAdvancingMessage();
+
+    console.log('Advancing... with option' + options);
+
+    try {
+        const result = await this.getAdvancement(options);
+        this.sendAdvancementMessage(options, result);
+      } catch (e) {
+        console.log(e);
+        this.sendErrorMessage(
+          `ERROR retrieving initial tasks array. Shutting Down.`
+        );
+        this.shutdown();
+        return;
+      }
+    
+    // don't loop yet
+    // await this.loop();
   }
 
   async loop() {
@@ -115,6 +140,12 @@ class AutonomousAgent {
     return res.data.tasks as string[];
   }
 
+  async getAdvancement(options): Promise<string[]> {
+    const res = await axios.post(`/api/advance`, { goal: this.goal, options: options });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
+    return res.data.response as string;
+  }
+
   async getAdditionalTasks(
     currentTask: string,
     result: string
@@ -171,6 +202,10 @@ class AutonomousAgent {
     this.sendMessage({ type: "thinking", value: "" });
   }
 
+  sendAdvancingMessage() {
+    this.sendMessage({ type: "advancing", value: "" });
+  }
+
   sendTaskMessage(task: string) {
     this.sendMessage({ type: "task", value: task });
   }
@@ -192,6 +227,14 @@ class AutonomousAgent {
       type: "action",
       info: message,
       value: "",
+    });
+  }
+
+  sendAdvancementMessage(options: string, result: string) {
+    this.sendMessage({
+      type: "action",
+      info: options,
+      value: result,
     });
   }
 }
