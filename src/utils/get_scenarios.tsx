@@ -3,8 +3,6 @@
 import { useState } from "react";
 import axios from "axios";
 import snapshot from '@snapshot-labs/snapshot.js';
-import { getAccount } from '@wagmi/core'
-import { Web3Provider } from '@ethersproject/providers';
 
 const GetScenarios = () => {  
   const [data, setData] = useState([]);

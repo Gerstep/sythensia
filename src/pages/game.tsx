@@ -4,6 +4,7 @@ import type { Message } from "@/components/GameWindow";
 import Expand from "@/components/expand";
 import Button from "@/components/Button";
 import AutonomousAgent from "@/components/AutonomousAgent";
+import DefaultLayout from '@/components/DefaultLayout';
 
 
 export default function Game() {
@@ -37,7 +38,7 @@ export default function Game() {
   };
 
   return (
-    <>
+    <DefaultLayout>
       <main className="flex h-screen w-screen flex-row">
       
       <div
@@ -53,26 +54,27 @@ export default function Game() {
               className="relative flex flex-col items-center font-mono"
             >
               <div className="flex flex-row items-start">
-                <span className="text-4xl font-bold xs:text-5xl sm:text-6xl">
+                <span className="text-2xl font-bold xs:text-3xl sm:text-4xl text-gray-400">
                   Synthasia
                 </span>
               </div>
             </div>
 
         <Expand className="w-full h-3/4">
-          <GameWindow messages={messages} />
+          <GameWindow messages={messages} name={name} />
         </Expand>
 
       {newTaskAdded ? (
         <div className="flex space-x-4">
-          <Button>Select Option 1</Button>
-          <Button>Select Option 2</Button>
-          <Button>Select Option 3</Button>
+          <span className="mr-2 font-bold mx-2 my-1 rounded-lg border-[2px] border-white/10 bg-gray-50 p-2 font-mono text-base">Select you next move</span>
+          <Button>Option 1</Button>
+          <Button>Option 2</Button>
+          <Button>Option 3</Button>
         </div>
       ) : (
         <Button className="mx-10" onClick={handleTask}>Explore {name}</Button>
       )}
       </div></div></main>
-    </>
+    </DefaultLayout>
   );
 }

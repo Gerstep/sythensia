@@ -7,7 +7,7 @@ interface ChatWindowProps {
     messages: Message[];
   }
 
-const GameWindow = ( {messages} ) => {
+const GameWindow = ( {messages, name} ) => {
 
     console.log(messages)
 
@@ -25,7 +25,7 @@ const GameWindow = ( {messages} ) => {
                 message={{
                   type: "system",
                   value:
-                    "> Welcome to Synthasia! Choose your first action.",
+                    "> Welcome to location "+ name + "! Choose your first action.",
                 }}
               />
             </Expand>
@@ -55,7 +55,7 @@ const getMessageIcon = (message: Message) => {
       case "goal":
         return "Starting a new journey:";
       case "task":
-        return "Option availabe:";
+        return "Option:";
       case "thinking":
         return "Thinking...";
       case "action":
