@@ -264,6 +264,10 @@ class AutonomousAgent {
     this.sendMessage({ type: "task", value: task, summary: summary });
   }
 
+  // async sendStoryMessage(task: string) {
+  //   this.sendMessage({ type: "story", value: task });
+  // }
+
   sendErrorMessage(error: string) {
     this.sendMessage({ type: "system", value: error });
   }

@@ -5,10 +5,13 @@ import Expand from "@/components/expand";
 import Button from "@/components/Button";
 import AutonomousAgent from "@/components/AutonomousAgent";
 import DefaultLayout from '@/components/DefaultLayout';
+import Router, { useRouter } from "next/router";
 
 
 export default function Game() {
-  const [name, setName] = React.useState<string>("");
+  const router = useRouter();
+  const { locationName, locationDescription } = router.query;
+  const [ name, setName] = React.useState<string>("");
   const [goalInput, setGoalInput] = React.useState<string>("");
   const [agent, setAgent] = React.useState<AutonomousAgent | null>(null);
   const [newTaskAdded, setNewTaskAdded] = useState(false);
@@ -17,8 +20,8 @@ export default function Game() {
   const [messages, setMessages] = React.useState<Message[]>([]);
 
   useEffect(() => {
-    setName("The Crypt")
-    setGoalInput('Location is "The Crypt", a hidden underground network of tunnels and chambers that serves as a hub for the cypherpunk community in the world of web3. The Crypt is a place of secrecy and intrigue, where hackers, activists, and freedom fighters come together to exchange ideas and plan their next moves.')
+    setName(locationName)
+    setGoalInput(locationDescription)
   }, []);
 
   useEffect(() => {

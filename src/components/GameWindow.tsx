@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { FaBrain, FaBolt, FaPlayCircle, FaStar } from "react-icons/fa";
+import { FaBrain, FaBolt, FaPlayCircle, FaStar, FaHotjar } from "react-icons/fa";
 import Expand from "./expand";
 
 interface ChatWindowProps {
@@ -61,6 +61,8 @@ const getMessageIcon = (message: Message) => {
         return <FaBrain className="mt-[0.1em] text-pink-400" />;
       case "advancing":
         return <FaBrain className="mt-[0.1em] text-pink-400" />;
+      case "story":
+        return <FaHotjar className="mt-[0.1em] text-pink-400" />;
       case "action":
         return <FaPlayCircle className="text-green-500" />;
     }
@@ -72,6 +74,8 @@ const getMessageIcon = (message: Message) => {
         return "Starting a new journey:";
       case "task":
         return "Option:";
+      case "story":
+        return "Here's what happened:";
       case "thinking":
         return "Thinking...";
       case "advancing":
@@ -82,7 +86,7 @@ const getMessageIcon = (message: Message) => {
   };
   
   export interface Message {
-    type: "goal" | "thinking" | "task" | "action" | "system" | "advancing";
+    type: "goal" | "thinking" | "task" | "action" | "system" | "advancing" | "story";
     info?: string;
     value: string;
     summary?: string;

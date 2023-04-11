@@ -1,27 +1,8 @@
-import { MongoClient, MongoClientOptions, Db } from 'mongodb';
+import { createClient } from '@supabase/supabase-js'
 
-const clientOptions: MongoClientOptions = {
-  connectTimeoutMS: 5000
-};
+export const db = createClient(
+  "https://iolaelmcstjuiddlhwym.supabase.co", 
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvbGFlbG1jc3RqdWlkZGxod3ltIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODEyMjIwNDIsImV4cCI6MTk5Njc5ODA0Mn0.qqGSnRm2QvPGVKNg4CM_OAN3WYrl4GffFAGFkbgk08E"
+)
 
-const uri = process.env.MONGODB_URI as string;
-
-let cachedDb: Db = null;
-
-export async function connectToDatabase() {
-  if (cachedDb) {
-    console.log('Using cached MongoDB connection');
-    return cachedDb;
-  }
-
-  const client = new MongoClient(uri, clientOptions);
-  try {
-    await client.connect();
-    console.log('Connected to MongoDB Atlas');
-    cachedDb = client.db();
-    return cachedDb;
-  } catch (error) {
-    console.error('Error connecting to MongoDB Atlas', error);
-    throw error;
-  }
-}
+console.log('envs: ' + process.env.SUPABASE_URL + process.env.SUPABASE_API_KEY)

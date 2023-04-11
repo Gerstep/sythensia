@@ -1,63 +1,93 @@
 import React, { useState } from "react";
-import useSWR from 'swr';
-import EpochManager from '../utils/epoch';
-import GetScenarios from "@/utils/get_scenarios";
 import DefaultLayout from "@/components/DefaultLayout";
 import Button from "@/components/Button";
+import { useEffect } from 'react';
+import axios from 'axios';
+import Link from "next/link";
 
-async function fetcher(url) {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
+const generateLocation = async () => {
+  try {
+    const new_location = await axios.get('/api/gen_locations');
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export default function Location() {
-  const [currentEpoch, setCurrentEpoch] = useState(0);
-  const { data, error } = useSWR("/api/data", fetcher, { refreshInterval: 30000 });
-  const [showOverview, setShowOverview] = useState(false);
-  const [numClicks, setNumClicks] = useState(0);
+const LocationList = ({ locations, onSelectLocation }) => (
+  <div className="p-4">
+    <h2 className="text-xl font-medium mb-2">Locations</h2>
+    {locations.map((location) => (
+      <Button key={location.name} className="w-full mb-2" onClick={() => onSelectLocation(location)}>
+        {location.name}
+      </Button>
+    ))}
+      <Button onClick={() => generateLocation()} className="bg-cyan-500">Create New Location</Button>
+  </div>
+);
 
-  if (error) return <div>Failed to load data</div>;
-  if (!data) return <div>Loading...</div>;
+const LocationDetails = ({ location }) => (
+  <div className="p-4">
+    <h2 className="text-xl font-medium mb-2">{location.name}</h2>
+    <p className="text-gray-200">{location.descr}</p>
+    <Button className="mx-auto my-4 w-1/2 bg-gray-400 hover:animate-pulse flex items-center justify-center">
+      <Link href={`/game?locationName=${location.name}&locationDescription=${location.descr}`}>
+        <span className="text-center">Enter {location.name}</span>
+      </Link>
+    </Button>
+  </div>
+);
 
-  const showLocation = () => {
-    setNumClicks(numClicks + 1);
-    setShowOverview(numClicks % 2 === 0);
+const Location = () => {
+  const [locations, setLocations] = React.useState([]);
+  const [selectedLocation, setSelectedLocation] = React.useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const handleLocationClick = (location) => {
+    setSelectedLocation(location);
   };
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const {data} = await axios.get('/api/fetch_locations');
+        setLocations(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLocations();
+  }, []);
+
+  // Choose location 0 automatically when page loaded
+  useEffect(() => {
+    if (locations.length > 0 && !selectedLocation) {
+      setSelectedLocation(locations[0]);
+    }
+  }, [locations, selectedLocation]);
+
+  if (loading) {
+    return <div className="">Loading...</div>;
+  }
 
   return (
     <DefaultLayout>
-      <main className="flex h-full w-screen flex-row">
-      <div id="content" className="z-10 flex h-screen w-full items-center justify-center p-2 px-2 sm:px-4 md:px-10">
-      <div id="layout" className="flex h-full w-full max-w-screen-lg flex-col items-center justify-between gap-3 md:justify-center">
-        <div className="relative flex flex-col items-center font-mono">
-          <span className="text-2xl font-bold xs:text-3xl sm:text-4xl text-gray-400">
-            Available locations
-          </span>
+      <div className="w-screen flex">
+        <div className="w-1/4 text-white font-mono">
+          <LocationList locations={locations} onSelectLocation={handleLocationClick}  />
         </div>
-        <Button onClick={showLocation}>{data.result[0].name}</Button>
-        {showOverview && (
-          <div className="text-white mb-2 mr-2 overflow-y-auto overflow-x-hidden sm-h:h-[16em] md-h:h-[21em] lg-h:h-[30em] ">
-            <p>{data.result[0].overview}</p>
-            <p>{data.result[0].history}</p>
-            <h3>These are possible events that can happen in {data.result[0].name} in the next epoch:</h3>
-              <GetScenarios epoch={currentEpoch} />
-            <h3>The following characters can be found here:</h3>
-            {data.result[0].npcs.map((item) => (
-              <p>
-                <b>{item.name}</b>
-                <br />
-                {item.description}
-              </p>
-            ))}
-
-            <EpochManager setCurrentEpoch={setCurrentEpoch} />
-            <p>Current Epoch (in ancestor component): {currentEpoch}</p>
-          </div>
-        )}
+        <div className="w-3/4 text-white font-mono">
+          {selectedLocation ? (
+            <LocationDetails location={selectedLocation} />
+          ) : (
+            <p>select</p>
+          )}
+        </div>
       </div>
-      </div>
-      </main>
     </DefaultLayout>
   );
-}
+};
+
+export default Location;

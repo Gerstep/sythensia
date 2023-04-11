@@ -1,5 +1,7 @@
 import { OpenAI } from "langchain";
+import { ChatOpenAI } from "langchain/chat_models";
 import { PromptTemplate } from "langchain/prompts";
+import { HumanChatMessage, SystemChatMessage } from "langchain/schema";
 import { LLMChain } from "langchain/chains";
 
 const model = new OpenAI({
@@ -8,6 +10,25 @@ const model = new OpenAI({
   modelName: "gpt-3.5-turbo",
   maxTokens: 250,
 });
+
+const chat = new ChatOpenAI({
+  modelName: "gpt-3.5-turbo",
+  openAIApiKey: process.env.OPENAI_API_KEY,
+});
+
+
+export const genLocationAgent = async () => {
+  return await chat.generate([
+    [
+      new SystemChatMessage(
+        'You are an AI that generates locations for a massive multiplayer online game. Each location must have a visual description, a short backstory describing the history of the place, a couple of key points of interest. Reply in the following format: "Location: {Name of the location} Description: {Location desctiption}'
+      ),
+      new HumanChatMessage(
+        'Please, create you first location.'
+      ),
+    ]
+  ]);
+};
 
 const startGoalPrompt = new PromptTemplate({
   template:
