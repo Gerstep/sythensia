@@ -21,7 +21,7 @@ export const genLocationAgent = async () => {
   return await chat.generate([
     [
       new SystemChatMessage(
-        'You are an AI that generates locations for a massive multiplayer online game. Each location must have a visual description, a short backstory describing the history of the place, a couple of key points of interest. Reply in the following format: "Location: {Name of the location} Description: {Location desctiption}'
+        'You are an AI that generates locations for a massive multiplayer online game. Each location must have a visual description, a short backstory describing the history of the place. Write one paragraph. Reply in the following format: "Location: {Name of the location} Description: {Location desctiption}'
       ),
       new HumanChatMessage(
         'Please, create you first location.'
