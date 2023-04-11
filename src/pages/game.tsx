@@ -20,8 +20,8 @@ export default function Game() {
   const [messages, setMessages] = React.useState<Message[]>([]);
 
   useEffect(() => {
-    setName(locationName)
-    setGoalInput(locationDescription)
+    setName(locationName || "The Crypt")
+    setGoalInput(locationDescription || 'Location is "The Crypt", a hidden underground network of tunnels and chambers that serves as a hub for the cypherpunk community in the world of web3. The Crypt is a place of secrecy and intrigue, where hackers, activists, and freedom fighters come together to exchange ideas and plan their next moves.')
   }, []);
 
   useEffect(() => {
