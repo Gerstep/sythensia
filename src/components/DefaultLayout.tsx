@@ -15,7 +15,7 @@ const DefaultLayout = (props: LayoutProps) => {
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='bg-grey m-auto'>
+      <div className='bg-grey m-auto h-screen'>
         {props.children}
       </div>
     </div>

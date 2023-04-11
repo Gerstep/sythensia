@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import snapshot from '@snapshot-labs/snapshot.js';
+import Button from "@/components/Button";
 
 const GetScenarios = () => {  
   const [data, setData] = useState([]);
@@ -38,9 +39,9 @@ const GetScenarios = () => {
 
   return (
     <>
-      <button onClick={handleButtonClick} disabled={isLoading}>
+      <Button onClick={handleButtonClick} disabled={isLoading}>
         {isLoading ? "Loading..." : "Show scenarios"}
-      </button>
+      </Button>
       {data.length > 0 && (
         <ul>
           {data.map((item) => (
@@ -48,9 +49,9 @@ const GetScenarios = () => {
                 {item.choice}
                 <br />
                 Current votes: {item.count.count}<br />
-                <button onClick={() => castVote(item.proposalId, item.count.index)}>
+                <Button onClick={() => castVote(item.proposalId, item.count.index)}>
                     Vote
-                </button>
+                </Button>
                 <p></p>
             </li>
           ))}

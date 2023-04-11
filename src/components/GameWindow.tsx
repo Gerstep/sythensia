@@ -85,6 +85,7 @@ const getMessageIcon = (message: Message) => {
     type: "goal" | "thinking" | "task" | "action" | "system" | "advancing";
     info?: string;
     value: string;
+    summary?: string;
   }
 
 const Message = ({ message }: { message: Message }) => {

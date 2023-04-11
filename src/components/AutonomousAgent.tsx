@@ -44,9 +44,6 @@ class AutonomousAgent {
       this.shutdown();
       return;
     }
-
-    // don't loop yet
-    // await this.loop();
   }
 
   async advance(options) {
@@ -77,7 +74,7 @@ class AutonomousAgent {
             result
         )
         this.tasks = this.tasks.concat(newOptions);
-        
+
         try {
             this.tasks = await this.getInitialTasks();
             for (const task of this.tasks) {
@@ -182,6 +179,12 @@ class AutonomousAgent {
     return res.data.response as string;
   }
 
+  async getSummary(task): Promise<string> {
+    const res = await axios.post(`/api/summarize`, { task: task });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
+    return res.data as string;
+  }
+
   async getAdditionalTasks(
     currentTask: string,
     result: string
@@ -254,8 +257,11 @@ class AutonomousAgent {
     this.sendMessage({ type: "advancing", value: "" });
   }
 
-  sendTaskMessage(task: string) {
-    this.sendMessage({ type: "task", value: task });
+  async sendTaskMessage(task: string) {
+    const summary = await this.getSummary(task as string)
+    console.log('SUMMARY: ' + summary)
+    // add quest summary
+    this.sendMessage({ type: "task", value: task, summary: summary });
   }
 
   sendErrorMessage(error: string) {

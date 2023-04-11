@@ -22,11 +22,12 @@ export default function Game() {
   }, []);
 
   useEffect(() => {
-    const filteredMessages = messages.filter(message => message.type === 'task').map(message => message.value);
+    const filteredMessages = messages.filter(message => message.type === 'task').map(message => ({ value: message.value, summary: message.summary }));
     if (filteredMessages.length > 0) {
       setNewTaskAdded(true);
-      setTaskMessages(filteredMessages.map(message => message));
-    }
+      const lastThreeTasks = filteredMessages.slice(-3);
+      setTaskMessages(lastThreeTasks);
+    }    
   }, [messages]);
 
   // generate options
@@ -82,8 +83,8 @@ export default function Game() {
           <div className="flex space-x-4">
             <span className="mr-2 font-bold p-2 my-2">Make a choice</span>
             {taskMessages.map(task => ( 
-              <Button key={task} onClick={() => advance(task)}>
-                {task.split(' ').slice(0, 2).join(' ')}
+              <Button key={task.summary} onClick={() => advance(task.value)}>
+                {task.summary.replace(/^["'](.*)["']\.?$/, '$1')}
               </Button>
             ))}
           </div>

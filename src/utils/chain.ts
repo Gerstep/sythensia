@@ -6,7 +6,7 @@ const model = new OpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 0.9,
   modelName: "gpt-3.5-turbo",
-  maxTokens: 500,
+  maxTokens: 250,
 });
 
 const startGoalPrompt = new PromptTemplate({
@@ -32,30 +32,44 @@ const advancePrompt = new PromptTemplate({
     });
   };
 
-const executeTaskPrompt = new PromptTemplate({
+const createTaskPrompt = new PromptTemplate({
+    template:
+      "You are a game master. Game location is `{goal}`. The player chose scenario `{result}`. Come up with three potential ways how this storyline can unfold further. Return the response as an array of strings that can be used in JSON.parse()",
+    inputVariables: ["goal", "result"],
+  });
+  export const executeCreateTaskAgent = async (
+    goal: string,
+    result: string
+  ) => {
+    return await new LLMChain({ llm: model, prompt: createTaskPrompt }).call({
+      goal,
+      result,
+    });
+  };
+
+const summarizePrompt = new PromptTemplate({
   template:
-    "You are an autonomous task execution AI called AgentGPT. You have the following objective `{goal}`. You have the following tasks `{task}`. Execute the task and return the response as a string.",
-  inputVariables: ["goal", "task"],
+    "You are a game master. Your goal is to create a name for the following story: `{task}`. Return the response as a string with no more than 5 words.",
+  inputVariables: ["task"],
 });
-export const executeTaskAgent = async (goal: string, task: string) => {
-  return await new LLMChain({ llm: model, prompt: executeTaskPrompt }).call({
-    goal,
+export const summarizeAgent = async (task: string) => {
+  return await new LLMChain({ llm: model, prompt: summarizePrompt }).call({
     task,
   });
 };
 
-const createTaskPrompt = new PromptTemplate({
+const executeTaskPrompt = new PromptTemplate({
   template:
-    "You are a game master. Game location is `{goal}`. The player chose scenario `{result}`.  Create a list of zero to three possible game scenarios. Return the response as an array of strings that can be used in JSON.parse()",
-  inputVariables: ["goal", "result"],
+    "You are an autonomous task execution AI called AgentGPT. You have the following objective `{goal}`. You have the following tasks `{task}`. Execute the task and return the response as a string without quotes.",
+  inputVariables: ["goal", "task"],
 });
-export const executeCreateTaskAgent = async (
-  goal: string,
-  result: string
-) => {
-  return await new LLMChain({ llm: model, prompt: createTaskPrompt }).call({
+export const executeTaskAgent = async (
+    goal: string, 
+    task: string
+  ) => {
+  return await new LLMChain({ llm: model, prompt: executeTaskPrompt }).call({
     goal,
-    result,
+    task,
   });
 };
 
