@@ -52,11 +52,47 @@ class AutonomousAgent {
   async advance(options) {
     this.sendAdvancingMessage();
 
+    console.log(`Looping number ${this.numLoops}`);
     console.log('Advancing... with option' + options);
+    console.log('goal: ' + this.goal);
+
+    this.numLoops += 1;
+    if (this.numLoops >= 10) {
+      this.sendLoopMessage();
+      this.shutdown();
+      return;
+    }
 
     try {
         const result = await this.getAdvancement(options);
         this.sendAdvancementMessage(options, result);
+
+        // call getAdditionalTasks
+        // pass goal + option + result
+        // get 3 tasks
+
+        console.log('GETTING MORE OPTIONS ' + result + ' CONTEXT: ' + this.goal)
+        const newOptions = await this.getAdditionalOptions(
+            this.goal,
+            result
+        )
+        this.tasks = this.tasks.concat(newOptions);
+        
+        try {
+            this.tasks = await this.getInitialTasks();
+            for (const task of this.tasks) {
+              await new Promise((r) => setTimeout(r, 800));
+              this.sendTaskMessage(task);
+            }
+          } catch (e) {
+            console.log(e);
+            this.sendErrorMessage(
+              `ERROR retrieving initial tasks array. Shutting Down.`
+            );
+            this.shutdown();
+            return;
+          }
+
       } catch (e) {
         console.log(e);
         this.sendErrorMessage(
@@ -155,6 +191,18 @@ class AutonomousAgent {
       tasks: this.tasks,
       lastTask: currentTask,
       result: result,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+    return res.data.tasks as string[];
+  }
+
+  async getAdditionalOptions(
+    goal: string,
+    result: string
+  ): Promise<string[]> {
+    const res = await axios.post(`/api/create`, {
+      goal: this.goal,
+      result: result
     });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     return res.data.tasks as string[];

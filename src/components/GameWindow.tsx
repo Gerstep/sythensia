@@ -93,7 +93,8 @@ const Message = ({ message }: { message: Message }) => {
         <div className="mr-2 inline-block h-[0.9em]">
           {getMessageIcon(message)}
         </div>
-        <span className="mr-2 font-bold">{getMessagePrefix(message)}</span><br /><br />
+        <span className="mr-2 font-bold">{getMessagePrefix(message)}</span>
+        {getMessagePrefix(message) && <p></p>}
         <span>{message.value}</span>
       </div>
     );
