@@ -32,7 +32,7 @@ export const genLocationAgent = async () => {
 
 const startGoalPrompt = new PromptTemplate({
   template:
-    "You are a game master. You need to come up with potential scenarios for a game location `{goal}`. Create a list of zero to three possible game scenarios. Return the response as an array of strings that can be used in JSON.parse()",
+    "You are a game master. You need to come up with potential scenarios for a game location `{goal}`. Create a list of zero to three possible game scenarios. Always return the response as an array of strings that can be used in JSON.parse()",
   inputVariables: ["goal"],
 });
 export const startGoalAgent = async (goal: string) => {
@@ -44,7 +44,7 @@ export const startGoalAgent = async (goal: string) => {
 // Beggining of the story
 const advancePrompt = new PromptTemplate({
     template:
-      "You are a game master. Game location is `{goal}`. The player chose scenario `{options}`. Write a beginning of a story. It should introduce main charater or characters and describe the story setting. Return the response as a string.",
+      "You are a game master. Game location is `{goal}`. The player chose scenario `{options}`. Write 2-3 sentence a beginning of a story. It should introduce main charater or characters and describe the story setting. Return the response as a string.",
     inputVariables: ["goal", "options"],
   });
   export const advanceAgent = async (goal: string, options: string) => {

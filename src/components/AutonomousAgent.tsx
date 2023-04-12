@@ -57,11 +57,13 @@ class AutonomousAgent {
         const result = await this.getAdvancement(options);
         this.sendAdvancementMessage(options, result);
 
-        // call getAdditionalTasks
-        // pass goal + option + result
-        // get 3 tasks
+        this.numLoops += 1;
+        if (this.numLoops >= 10) {
+          this.sendLoopMessage();
+          this.shutdown();
+          return;
+        }
 
-        // console.log('GETTING MORE OPTIONS ' + result + ' CONTEXT: ' + this.goal)
         const newOptions = await this.getAdditionalOptions(
             this.goal,
             result
