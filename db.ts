@@ -3,6 +3,6 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 export const db = createClient(
-  SUPABASE_URL, 
-  SUPABASE_API_KEY
+  process.env.SUPABASE_URL, 
+  process.env.SUPABASE_API_KEY
 )
