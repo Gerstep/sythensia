@@ -281,7 +281,7 @@ class AutonomousAgent {
     });
   }
 
-  sendAdvancementMessage(options: string, result: string) {
+  sendAdvancementMessage(options: string, result: string[]) {
     this.sendMessage({
       type: "action",
       info: options,
