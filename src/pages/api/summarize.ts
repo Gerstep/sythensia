@@ -26,6 +26,5 @@ export default async function handler(
     req.body.task
   );
   console.log(completion.text);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return res.status(200).json(completion.text);
 }

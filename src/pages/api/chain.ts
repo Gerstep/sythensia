@@ -17,6 +17,5 @@ export default async function handler(
 ) {
   const completion = await startGoalAgent(req.body.goal);
   console.log(completion.text);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   res.status(200).json({ tasks: extractArray(completion.text) });
 }

@@ -18,6 +18,5 @@ export default async function handler(
 ) {
   const completion = await advanceAgent(req.body.goal, req.body.options);
   console.log(completion.text);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   res.status(200).json({ response: completion.text as string });
 }
