@@ -53,13 +53,6 @@ class AutonomousAgent {
     console.log('Advancing... with option' + options);
     console.log('goal: ' + this.goal);
 
-    this.numLoops += 1;
-    if (this.numLoops >= 10) {
-      this.sendLoopMessage();
-      this.shutdown();
-      return;
-    }
-
     try {
         const result = await this.getAdvancement(options);
         this.sendAdvancementMessage(options, result);
@@ -68,15 +61,20 @@ class AutonomousAgent {
         // pass goal + option + result
         // get 3 tasks
 
-        console.log('GETTING MORE OPTIONS ' + result + ' CONTEXT: ' + this.goal)
+        // console.log('GETTING MORE OPTIONS ' + result + ' CONTEXT: ' + this.goal)
         const newOptions = await this.getAdditionalOptions(
             this.goal,
             result
         )
         this.tasks = this.tasks.concat(newOptions);
+        // console.log(newOptions)
+        // //this.sendActionMessage(newOptions);
 
         try {
-            this.tasks = await this.getInitialTasks();
+            this.tasks = await this.getAdditionalOptions(
+              this.goal,
+              result
+            );
             for (const task of this.tasks) {
               await new Promise((r) => setTimeout(r, 800));
               this.sendTaskMessage(task);

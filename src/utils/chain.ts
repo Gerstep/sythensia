@@ -8,7 +8,7 @@ const model = new OpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 0.9,
   modelName: "gpt-3.5-turbo",
-  maxTokens: 250,
+  maxTokens: 300,
 });
 
 const chat = new ChatOpenAI({
@@ -41,9 +41,10 @@ export const startGoalAgent = async (goal: string) => {
   });
 };
 
+// Beggining of the story
 const advancePrompt = new PromptTemplate({
     template:
-      "You are a game master. Game location is `{goal}`. The player chose scenario `{options}`. Write a short story based on this scenario. Return the response as a string.",
+      "You are a game master. Game location is `{goal}`. The player chose scenario `{options}`. Write a beginning of a story. It should introduce main charater or characters and describe the story setting. Return the response as a string.",
     inputVariables: ["goal", "options"],
   });
   export const advanceAgent = async (goal: string, options: string) => {
@@ -53,16 +54,17 @@ const advancePrompt = new PromptTemplate({
     });
   };
 
-const createTaskPrompt = new PromptTemplate({
+// Conflict
+const conflictPrompt = new PromptTemplate({
     template:
-      "You are a game master. Game location is `{goal}`. The player chose scenario `{result}`. Come up with three potential ways how this storyline can unfold further. Return the response as an array of strings that can be used in JSON.parse()",
+      "You are a game master. Game location is `{goal}`. Previously the following happened: `{result}`. You need write exactly three options of how this story might continue. Return the response as an array of strings that can be used in JSON.parse()",
     inputVariables: ["goal", "result"],
   });
-  export const executeCreateTaskAgent = async (
+  export const getConflictOptions = async (
     goal: string,
     result: string
   ) => {
-    return await new LLMChain({ llm: model, prompt: createTaskPrompt }).call({
+    return await new LLMChain({ llm: model, prompt: conflictPrompt }).call({
       goal,
       result,
     });

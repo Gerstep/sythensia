@@ -2,7 +2,7 @@ import type { NextApiRequest } from "next";
 import type { NextApiResponse } from "next";
 
 import {
-  executeCreateTaskAgent,
+  getConflictOptions,
   extractArray,
 } from "../../utils/chain";
 
@@ -23,7 +23,7 @@ export default async function handler(
   req: CreateTaskAPIRequest,
   res: CreateTaskAPIResponse
 ) {
-  const completion = await executeCreateTaskAgent(
+  const completion = await getConflictOptions(
     req.body.goal,
     req.body.result
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { FaBrain, FaBolt, FaPlayCircle, FaStar, FaHotjar } from "react-icons/fa";
+import { FaBrain, FaBolt, FaPlayCircle, FaStar, FaHotjar, FaRunning } from "react-icons/fa";
 import Expand from "./expand";
 
 interface ChatWindowProps {
@@ -38,7 +38,7 @@ const GameWindow = ( {messages, name} ) => {
                 message={{
                   type: "system",
                   value:
-                    "⛩ You enter your first location, "+ name + "! Choose your action.",
+                    "⛩ You enter location, "+ name + "! Choose your action.",
                 }}
               />
             </Expand>
@@ -60,7 +60,7 @@ const getMessageIcon = (message: Message) => {
       case "thinking":
         return <FaBrain className="mt-[0.1em] text-pink-400" />;
       case "advancing":
-        return <FaBrain className="mt-[0.1em] text-pink-400" />;
+        return <FaRunning className="mt-[0.1em] text-pink-400" />;
       case "story":
         return <FaHotjar className="mt-[0.1em] text-pink-400" />;
       case "action":
@@ -71,9 +71,9 @@ const getMessageIcon = (message: Message) => {
   const getMessagePrefix = (message: Message) => {
     switch (message.type) {
       case "goal":
-        return "Starting a new journey:";
+        return "Starting a Journey:";
       case "task":
-        return "Option:";
+        return "Action Available:";
       case "story":
         return "Here's what happened:";
       case "thinking":
@@ -90,6 +90,7 @@ const getMessageIcon = (message: Message) => {
     info?: string;
     value: string;
     summary?: string;
+    context?: string;
   }
 
 const Message = ({ message }: { message: Message }) => {
