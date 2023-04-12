@@ -46,7 +46,7 @@ class AutonomousAgent {
     }
   }
 
-  async advance(options) {
+  async advance(options: string) {
     this.sendAdvancingMessage();
 
     console.log(`Looping number ${this.numLoops}`);
