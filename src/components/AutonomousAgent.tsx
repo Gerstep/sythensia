@@ -169,19 +169,16 @@ class AutonomousAgent {
 
   async getInitialTasks(): Promise<string[]> {
     const res = await axios.post(`/api/chain`, { goal: this.goal });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
     return res.data.tasks as string[];
   }
 
   async getAdvancement(options): Promise<string[]> {
     const res = await axios.post(`/api/advance`, { goal: this.goal, options: options });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
     return res.data.response as string;
   }
 
   async getSummary(task): Promise<string> {
     const res = await axios.post(`/api/summarize`, { task: task });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
     return res.data as string;
   }
 
@@ -195,7 +192,6 @@ class AutonomousAgent {
       lastTask: currentTask,
       result: result,
     });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     return res.data.tasks as string[];
   }
 
@@ -207,7 +203,6 @@ class AutonomousAgent {
       goal: this.goal,
       result: result
     });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     return res.data.tasks as string[];
   }
 
@@ -216,7 +211,6 @@ class AutonomousAgent {
       goal: this.goal,
       task: task,
     });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
     return res.data.response as string;
   }
 
@@ -259,7 +253,6 @@ class AutonomousAgent {
 
   async sendTaskMessage(task: string) {
     const summary = await this.getSummary(task as string)
-    console.log('SUMMARY: ' + summary)
     // add quest summary
     this.sendMessage({ type: "task", value: task, summary: summary });
   }
