@@ -1,4 +1,4 @@
-import { db } from '../../../db'
+import { db } from '../../db'
 import { genLocationAgent } from "../../utils/chain";
 
 interface ParsedObject {
